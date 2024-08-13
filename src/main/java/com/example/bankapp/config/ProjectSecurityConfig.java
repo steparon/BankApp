@@ -1,5 +1,6 @@
 package com.example.bankapp.config;
 
+import com.example.bankapp.exceptionhandling.CustomBasicAuthenticationEntryPoint;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.password.CompromisedPasswordChecker;
@@ -26,15 +27,10 @@ public class ProjectSecurityConfig {
                 .requestMatchers("/notices", "/contact", "/error", "/register").permitAll());
 
         http.formLogin(withDefaults());
-        http.httpBasic(withDefaults());
+        http.httpBasic(hbc -> hbc.authenticationEntryPoint(new CustomBasicAuthenticationEntryPoint()));
 
         return http.build();
     }
-
-  /*  @Bean
-    public UserDetailsService userDetailsService(DataSource dataSource) {
-        return new JdbcUserDetailsManager(dataSource);
-    } */
 
     @Bean
     public PasswordEncoder passwordEncoder() {
