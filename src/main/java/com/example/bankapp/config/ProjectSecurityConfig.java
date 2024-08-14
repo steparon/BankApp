@@ -23,10 +23,15 @@ public class ProjectSecurityConfig {
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(csrfConfig -> csrfConfig.disable());
         http.authorizeHttpRequests((requests) -> requests
-                .requestMatchers("/myAccount").hasAuthority("VIEWACCOUNT")
+                /*.requestMatchers("/myAccount").hasAuthority("VIEWACCOUNT")
                 .requestMatchers( "/myBalance").hasAuthority("VIEWBALANCE")
                 .requestMatchers("/myLoans").hasAuthority("VIEWLOANS")
                 .requestMatchers( "/myCards").hasAuthority("VIEWCARDS")
+                .requestMatchers( "/user").authenticated() */
+                .requestMatchers("/myAccount").hasRole("USER")
+                .requestMatchers( "/myBalance").hasAnyRole("USER", "ADMIN")
+                .requestMatchers("/myLoans").hasRole("USER")
+                .requestMatchers( "/myCards").hasRole("USER")
                 .requestMatchers( "/user").authenticated()
                 .requestMatchers("/notices", "/contact", "/error", "/register").permitAll());
 
