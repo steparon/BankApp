@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.password.CompromisedPasswordChecker;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,13 +22,9 @@ public class ProjectSecurityConfig {
 
     @Bean
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
+        http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         http.csrf(csrfConfig -> csrfConfig.disable());
         http.authorizeHttpRequests((requests) -> requests
-                /*.requestMatchers("/myAccount").hasAuthority("VIEWACCOUNT")
-                .requestMatchers( "/myBalance").hasAuthority("VIEWBALANCE")
-                .requestMatchers("/myLoans").hasAuthority("VIEWLOANS")
-                .requestMatchers( "/myCards").hasAuthority("VIEWCARDS")
-                .requestMatchers( "/user").authenticated() */
                 .requestMatchers("/myAccount").hasRole("USER")
                 .requestMatchers( "/myBalance").hasAnyRole("USER", "ADMIN")
                 .requestMatchers("/myLoans").hasRole("USER")
